@@ -1,0 +1,61 @@
+group 'com.explorer.bailey'
+version '1.0.0'
+
+apply plugin: 'java'
+apply plugin: 'com.minstone.mobile.application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven {
+        url 'http://maven.minstone.com.cn/content/groups/public/'
+    }
+    maven {
+        url "http://maven.aliyun.com/nexus/content/groups/public/"
+    }
+    mavenCentral()
+    jcenter()
+}
+
+allprojects {
+    // 加此代码，解决中文打包所出现乱码问题
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url 'http://maven.minstone.com.cn/content/groups/public/'
+        }
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.minstone.mobile:gradle-plugin:+"
+        // Spring Boot 的Gradle管理插件，版本由上面gradle-plugin控制
+        classpath "org.springframework.boot:spring-boot-gradle-plugin"
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    compile "org.projectlombok:lombok:1.16.10"
+    compile "org.projectlombok:lombok:1.16.10"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "com.minstone.mobile.core:java-tool"
+    compile "com.minstone.mobile.core:mobile-core-validation"
+    compile "com.minstone.mobile.core:mobile-core-api"
+    compile "mysql:mysql-connector-java:5.1.44"
+}
