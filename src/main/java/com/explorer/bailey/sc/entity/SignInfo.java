@@ -35,4 +35,6 @@ public class SignInfo {
 
     private Date endDate;
 
+    private String remark;
+
 }

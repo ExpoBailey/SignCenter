@@ -27,4 +27,6 @@ public class SignModel {
 
     @NotNull(message = "结束时间不能为空")
     private Date endDate;
+
+    private String remark;
 }

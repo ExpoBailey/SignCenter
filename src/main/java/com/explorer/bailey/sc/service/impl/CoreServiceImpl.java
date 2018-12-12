@@ -114,12 +114,12 @@ public class CoreServiceImpl implements ICoreService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public boolean sign(Long id, Long projectId, Date startDate, Date endDate) {
+    public boolean sign(Long id, Long projectId, Date startDate, Date endDate, String remark) {
         Project project = projectDao.findOne(projectId);
         if (project == null) {
             throw new ServiceException(ApiStatus.NOT_FOUND, "该项目不存在，无法签到");
         }
-        SignInfo signInfo = new SignInfo(id, SessionUtils.getUser(), project, startDate, endDate);
+        SignInfo signInfo = new SignInfo(id, SessionUtils.getUser(), project, startDate, endDate, remark);
         return signInfoDao.save(signInfo) != null;
     }
 

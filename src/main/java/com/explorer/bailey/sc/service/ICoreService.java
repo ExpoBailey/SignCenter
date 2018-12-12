@@ -27,7 +27,7 @@ public interface ICoreService {
 
     List<Project> findAllByCreator(Long userId);
 
-    boolean sign(Long id, Long projectId, Date startDate, Date endDate);
+    boolean sign(Long id, Long projectId, Date startDate, Date endDate, String remark);
 
     List<SignInfo> findSignInfo(Long userId, Long projectId, Date startDate, Date endDate);
 
