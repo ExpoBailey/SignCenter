@@ -1,5 +1,6 @@
 package com.explorer.bailey.sc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -29,4 +30,7 @@ public class SignModel {
     private Date endDate;
 
     private String remark;
+
+    @JsonIgnore
+    private int sortFlag;
 }

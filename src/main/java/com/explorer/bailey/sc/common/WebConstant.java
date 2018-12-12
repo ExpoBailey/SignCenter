@@ -28,4 +28,22 @@ public class WebConstant {
      */
     public final static int MAX_COOKIE = 60 * 60 * 24 * 365;
 
+    /**
+     * 排序枚举
+     */
+    public enum Sort {
+        DESC(0),
+        ASC(1);
+
+        private int value;
+
+        Sort(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
 }

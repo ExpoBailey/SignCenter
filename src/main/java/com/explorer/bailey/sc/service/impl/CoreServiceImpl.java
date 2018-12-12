@@ -13,6 +13,7 @@ import com.explorer.bailey.sc.utils.CookieUtils;
 import com.explorer.bailey.sc.utils.SessionUtils;
 import com.minstone.common.utils.StringUtils;
 import com.minstone.common.utils.code.MD5CodeUtil;
+import com.minstone.common.utils.date.DateUtils;
 import com.minstone.mobile.core.spring.api.ApiStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
@@ -124,15 +125,23 @@ public class CoreServiceImpl implements ICoreService {
     }
 
     @Override
-    public List<SignInfo> findSignInfo(Long userId, Long projectId, Date startDate, Date endDate) {
+    public List<SignInfo> findSignInfo(Long userId, Long projectId, Date startDate, Date endDate, WebConstant.Sort sort) {
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(SignInfo.class);
-        detachedCriteria.add(Restrictions.between("startDate", startDate, endDate));
+
+        endDate = (endDate == null && startDate != null) ? DateUtils.getDateByStr("2099-12-12") : endDate;
+
+        startDate = (startDate == null && endDate != null) ? DateUtils.getDateByStr("2018-01-01") : startDate;
+
+        if (startDate != null) {
+            detachedCriteria.add(Restrictions.between("startDate", startDate, endDate));
+        }
+
         detachedCriteria.createAlias("user","u").add(Restrictions.eq("u.id", userId));
         detachedCriteria.createAlias("project","p");
         if (projectId != null) {
             detachedCriteria.add(Restrictions.eq("p.id", projectId));
         }
-        detachedCriteria.addOrder(Order.desc("startDate"));
+        detachedCriteria.addOrder(sort == WebConstant.Sort.DESC ? Order.desc("startDate") : Order.asc("startDate"));
         return detachedCriteria.getExecutableCriteria((Session) emf.createEntityManager().getDelegate()).list();
     }
 

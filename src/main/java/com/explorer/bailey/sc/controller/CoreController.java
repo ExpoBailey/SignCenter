@@ -1,5 +1,6 @@
 package com.explorer.bailey.sc.controller;
 
+import com.explorer.bailey.sc.common.WebConstant;
 import com.explorer.bailey.sc.entity.Project;
 import com.explorer.bailey.sc.entity.SignInfo;
 import com.explorer.bailey.sc.entity.User;
@@ -9,6 +10,7 @@ import com.explorer.bailey.sc.model.UserModel;
 import com.explorer.bailey.sc.service.ICoreService;
 import com.explorer.bailey.sc.service.IUserService;
 import com.explorer.bailey.sc.utils.SessionUtils;
+import com.minstone.mobile.core.common.utils.judge.JudgeUtils;
 import com.minstone.mobile.core.spring.api.ApiResult;
 import com.minstone.mobile.core.spring.validation.ObjectValid;
 import com.minstone.mobile.core.spring.validation.ValidStarter;
@@ -129,14 +131,17 @@ public class CoreController {
 
     @PostMapping("/core/sign")
     @ValidStarter
-    public ApiResult sign(@ObjectValid(fieldNames = {"projectId", "startDate", "endDate"}) @RequestBody SignModel signModel) {
+    public ApiResult sign(@ObjectValid(fieldNames = {"projectId", "startDate"}) @RequestBody SignModel signModel) {
         boolean success = coreService.sign(signModel.getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate(), signModel.getRemark());
         return ApiResult.asserts(success);
     }
 
     @GetMapping("/core/sign/all")
     public ApiResult findAllSignInfo(SignModel signModel) {
-        List<SignInfo> list = coreService.findSignInfo(SessionUtils.getUser().getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate());
+        List<SignInfo> list = coreService.findSignInfo(SessionUtils.getUser().getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate(), signModel.getSortFlag() == 0 ? WebConstant.Sort.DESC : WebConstant.Sort.ASC);
+        if (!JudgeUtils.isEmpty(list)) {
+            list.forEach( signInfo -> signInfo.setUser(null));
+        }
         return ApiResult.asserts(list);
     }
 
