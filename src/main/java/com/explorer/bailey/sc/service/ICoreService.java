@@ -30,7 +30,7 @@ public interface ICoreService {
 
     boolean sign(Long id, Long projectId, Date startDate, Date endDate, String remark);
 
-    List<SignInfo> findSignInfo(Long userId, Long projectId, Date startDate, Date endDate, WebConstant.Sort sort);
+    List<SignInfo> findSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort);
 
     SignInfo findSingInfoById(Long signInfoId);
 }

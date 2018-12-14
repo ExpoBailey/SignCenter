@@ -14,6 +14,7 @@ import com.explorer.bailey.sc.utils.SessionUtils;
 import com.minstone.common.utils.StringUtils;
 import com.minstone.common.utils.code.MD5CodeUtil;
 import com.minstone.common.utils.date.DateUtils;
+import com.minstone.mobile.core.common.utils.judge.JudgeUtils;
 import com.minstone.mobile.core.spring.api.ApiStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
@@ -125,7 +126,7 @@ public class CoreServiceImpl implements ICoreService {
     }
 
     @Override
-    public List<SignInfo> findSignInfo(Long userId, Long projectId, Date startDate, Date endDate, WebConstant.Sort sort) {
+    public List<SignInfo> findSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort) {
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(SignInfo.class);
 
         endDate = (endDate == null && startDate != null) ? DateUtils.getDateByStr("2099-12-12") : endDate;
@@ -138,8 +139,8 @@ public class CoreServiceImpl implements ICoreService {
 
         detachedCriteria.createAlias("user","u").add(Restrictions.eq("u.id", userId));
         detachedCriteria.createAlias("project","p");
-        if (projectId != null) {
-            detachedCriteria.add(Restrictions.eq("p.id", projectId));
+        if (!JudgeUtils.isEmpty(projectIds)) {
+            detachedCriteria.add(Restrictions.in("p.id", projectIds));
         }
         detachedCriteria.addOrder(sort == WebConstant.Sort.DESC ? Order.desc("startDate") : Order.asc("startDate"));
         return detachedCriteria.getExecutableCriteria((Session) emf.createEntityManager().getDelegate()).list();

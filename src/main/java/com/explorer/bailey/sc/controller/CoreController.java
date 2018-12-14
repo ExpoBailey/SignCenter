@@ -138,7 +138,7 @@ public class CoreController {
 
     @GetMapping("/core/sign/all")
     public ApiResult findAllSignInfo(SignModel signModel) {
-        List<SignInfo> list = coreService.findSignInfo(SessionUtils.getUser().getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate(), signModel.getSortFlag() == 0 ? WebConstant.Sort.DESC : WebConstant.Sort.ASC);
+        List<SignInfo> list = coreService.findSignInfo(SessionUtils.getUser().getId(), signModel.getProjectIds(), signModel.getStartDate(), signModel.getEndDate(), signModel.getSortFlag() == 0 ? WebConstant.Sort.DESC : WebConstant.Sort.ASC);
         if (!JudgeUtils.isEmpty(list)) {
             list.forEach( signInfo -> signInfo.setUser(null));
         }
