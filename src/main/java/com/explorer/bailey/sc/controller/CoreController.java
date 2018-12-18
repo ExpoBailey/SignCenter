@@ -36,6 +36,17 @@ public class CoreController {
     @Resource
     private ICoreService coreService;
 
+    @GetMapping("/user/login/judge")
+    public ApiResult alreadyLogin() {
+        User user = SessionUtils.getUser();
+        HashMap<String, Object> data = new HashMap<>();
+        boolean flag = user != null;
+        data.put("login", flag);
+        data.put("userCode", flag ? user.getUserCode() : "");
+        data.put("userName", flag ? user.getUserName() : "");
+        return ApiResult.asserts(data);
+    }
+
     @PostMapping("/user/add")
     @ValidStarter
     public ApiResult addUser(@ObjectValid(fieldNames = {"userCode", "userName", "password"}) @RequestBody UserModel userModel) {
