@@ -27,6 +27,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import java.util.Date;
@@ -143,7 +144,13 @@ public class CoreServiceImpl implements ICoreService {
             detachedCriteria.add(Restrictions.in("p.id", projectIds));
         }
         detachedCriteria.addOrder(sort == WebConstant.Sort.DESC ? Order.desc("startDate") : Order.asc("startDate"));
-        return detachedCriteria.getExecutableCriteria((Session) emf.createEntityManager().getDelegate()).list();
+        EntityManager entityManager = emf.createEntityManager();
+        try {
+            return detachedCriteria.getExecutableCriteria((Session) entityManager.getDelegate()).list();
+
+        } finally {
+          entityManager.close();
+        }
     }
 
     @Override

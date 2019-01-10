@@ -56,5 +56,6 @@ dependencies {
     compile "com.minstone.mobile.core:java-tool"
     compile "com.minstone.mobile.core:mobile-core-validation"
     compile "com.minstone.mobile.core:mobile-core-api"
+    compile "com.minstone.mobile.core:mobile-core-datasource"
     compile "mysql:mysql-connector-java:5.1.44"
 }
