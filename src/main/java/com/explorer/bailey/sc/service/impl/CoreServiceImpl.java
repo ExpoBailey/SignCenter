@@ -52,12 +52,8 @@ public class CoreServiceImpl implements ICoreService {
     @Autowired
     private ISignInfoDao signInfoDao;
 
-    private EntityManagerFactory emf;
-
-    @PersistenceUnit
-    public void setEntityManagerFactory(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public boolean login(String userCode, String password) {
@@ -128,29 +124,29 @@ public class CoreServiceImpl implements ICoreService {
 
     @Override
     public List<SignInfo> findSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort) {
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(SignInfo.class);
 
         endDate = (endDate == null && startDate != null) ? DateUtils.getDateByStr("2099-12-12") : endDate;
 
         startDate = (startDate == null && endDate != null) ? DateUtils.getDateByStr("2018-01-01") : startDate;
+
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(SignInfo.class);
 
         if (startDate != null) {
             detachedCriteria.add(Restrictions.between("startDate", startDate, endDate));
         }
 
         detachedCriteria.createAlias("user","u").add(Restrictions.eq("u.id", userId));
+
         detachedCriteria.createAlias("project","p");
+
         if (!JudgeUtils.isEmpty(projectIds)) {
             detachedCriteria.add(Restrictions.in("p.id", projectIds));
         }
-        detachedCriteria.addOrder(sort == WebConstant.Sort.DESC ? Order.desc("startDate") : Order.asc("startDate"));
-        EntityManager entityManager = emf.createEntityManager();
-        try {
-            return detachedCriteria.getExecutableCriteria((Session) entityManager.getDelegate()).list();
 
-        } finally {
-          entityManager.close();
-        }
+        detachedCriteria.addOrder(sort == WebConstant.Sort.DESC ? Order.desc("startDate") : Order.asc("startDate"));
+
+        return signInfoDao.list(detachedCriteria);
+
     }
 
     @Override

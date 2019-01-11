@@ -1,6 +1,7 @@
 package com.explorer.bailey.sc.dao;
 
 import com.explorer.bailey.sc.entity.User;
+import com.explorer.bailey.sc.jpa.DefaultRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @description
  * @since 2018/10/8
  */
-public interface IUserDao extends JpaRepository<User, Long> {
+public interface IUserDao extends DefaultRepository<User, Long> {
     User findByUserCode(String userCode);
 }
