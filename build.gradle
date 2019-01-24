@@ -40,7 +40,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.minstone.mobile:gradle-plugin:+"
+        classpath "com.minstone.mobile:gradle-plugin:1.4.1"
         // Spring Boot 的Gradle管理插件，版本由上面gradle-plugin控制
         classpath "org.springframework.boot:spring-boot-gradle-plugin"
     }
