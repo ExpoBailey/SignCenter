@@ -3,6 +3,7 @@ package com.explorer.bailey.sc.service;
 import com.explorer.bailey.sc.common.WebConstant;
 import com.explorer.bailey.sc.entity.Project;
 import com.explorer.bailey.sc.entity.SignInfo;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -33,4 +34,6 @@ public interface ICoreService {
     List<SignInfo> findSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort);
 
     SignInfo findSingInfoById(Long signInfoId);
+
+    Page<SignInfo> findPageSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort, int pageIndex, int pageSize);
 }

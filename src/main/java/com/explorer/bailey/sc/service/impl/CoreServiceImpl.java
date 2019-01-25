@@ -22,14 +22,19 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -147,6 +152,42 @@ public class CoreServiceImpl implements ICoreService {
 
         return signInfoDao.list(detachedCriteria);
 
+    }
+
+    @Override
+    public Page<SignInfo> findPageSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort, int pageIndex, int pageSize) {
+
+        endDate = (endDate == null && startDate != null) ? DateUtils.getDateByStr("2099-12-12") : endDate;
+
+        startDate = (startDate == null && endDate != null) ? DateUtils.getDateByStr("2018-01-01") : startDate;
+
+        Date finalStartDate = startDate;
+        Date finalEndDate = endDate;
+        Specification<SignInfo> specification = new Specification<SignInfo>() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                List<Predicate> predicateList = new ArrayList<>();
+
+                // 三个条件
+                if (!JudgeUtils.isEmpty(projectIds)) {
+                    CriteriaBuilder.In idIn = cb.in(root.get("project").get("id").as(Long.class));
+                    projectIds.forEach(idIn::value);
+                    predicateList.add(idIn);
+                }
+                if (userId != null) {
+                    predicateList.add(cb.equal(root.get("user").get("id").as(Long.class), userId));
+                }
+                if (finalStartDate != null) {
+                    predicateList.add(cb.between(root.get("startDate").as(Date.class), finalStartDate, finalEndDate));
+                }
+
+                return cb.and(predicateList.toArray(new Predicate[0]));
+            }
+        };
+
+        PageRequest pageRequest = new PageRequest(pageIndex - 1, pageSize, new Sort(sort == WebConstant.Sort.ASC ? Sort.Direction.ASC : Sort.Direction.DESC, "startDate"));
+
+        return signInfoDao.findAll(specification, pageRequest);
     }
 
     @Override

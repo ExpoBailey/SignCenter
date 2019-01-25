@@ -9,11 +9,14 @@ import com.explorer.bailey.sc.model.SignModel;
 import com.explorer.bailey.sc.model.UserModel;
 import com.explorer.bailey.sc.service.ICoreService;
 import com.explorer.bailey.sc.service.IUserService;
+import com.explorer.bailey.sc.utils.PageUtils;
 import com.explorer.bailey.sc.utils.SessionUtils;
+import com.minstone.mobile.core.common.entity.Pager;
 import com.minstone.mobile.core.common.utils.judge.JudgeUtils;
 import com.minstone.mobile.core.spring.api.ApiResult;
 import com.minstone.mobile.core.spring.validation.ObjectValid;
 import com.minstone.mobile.core.spring.validation.ValidStarter;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -154,6 +157,20 @@ public class CoreController {
             list.forEach( signInfo -> signInfo.setUser(null));
         }
         return ApiResult.asserts(list);
+    }
+
+    @GetMapping("/core/sign/page")
+    public ApiResult findPageSignInfo(SignModel signModel, Pager pager) {
+        Page<SignInfo> page = coreService.findPageSignInfo(SessionUtils.getUser().getId(),
+                signModel.getProjectIds(),
+                signModel.getStartDate(), signModel.getEndDate(),
+                signModel.getSortFlag() == 0 ? WebConstant.Sort.DESC : WebConstant.Sort.ASC,
+                pager.getPageIndex() == 0 ? 1 : pager.getPageIndex(),
+                pager.getPageSize() == 0 ? 10 : pager.getPageSize());
+        if (!JudgeUtils.isEmpty(page.getContent())) {
+            page.getContent().forEach( signInfo -> signInfo.setUser(null));
+        }
+        return ApiResult.asserts(PageUtils.pageToApiPager(page));
     }
 
 }
