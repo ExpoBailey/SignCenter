@@ -146,7 +146,7 @@ public class CoreController {
     @PostMapping("/core/sign")
     @ValidStarter
     public ApiResult sign(@ObjectValid(fieldNames = {"projectId", "startDate"}) @RequestBody SignModel signModel) {
-        boolean success = coreService.sign(signModel.getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate(), signModel.getRemark());
+        boolean success = coreService.sign(signModel.getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate(), signModel.getRemark(), signModel.getStatus());
         return ApiResult.asserts(success);
     }
 

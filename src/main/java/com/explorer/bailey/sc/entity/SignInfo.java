@@ -36,4 +36,9 @@ public class SignInfo {
 
     private String remark;
 
+    /**
+     * 0:正常卡；1：补卡
+     */
+    private int status;
+
 }

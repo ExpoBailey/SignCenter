@@ -35,6 +35,8 @@ public class SignModel {
 
     private String remark;
 
+    private int status;
+
     @JsonIgnore
     private int sortFlag;
 

@@ -29,7 +29,7 @@ public interface ICoreService {
 
     List<Project> findAllByCreator(Long userId);
 
-    boolean sign(Long id, Long projectId, Date startDate, Date endDate, String remark);
+    boolean sign(Long id, Long projectId, Date startDate, Date endDate, String remark, int status);
 
     List<SignInfo> findSignInfo(Long userId, List<Long> projectIds, Date startDate, Date endDate, WebConstant.Sort sort);
 
