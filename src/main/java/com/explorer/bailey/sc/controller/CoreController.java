@@ -1,12 +1,14 @@
 package com.explorer.bailey.sc.controller;
 
 import com.explorer.bailey.sc.common.WebConstant;
+import com.explorer.bailey.sc.entity.Award;
 import com.explorer.bailey.sc.entity.Project;
 import com.explorer.bailey.sc.entity.SignInfo;
 import com.explorer.bailey.sc.entity.User;
 import com.explorer.bailey.sc.model.ProjectModel;
 import com.explorer.bailey.sc.model.SignModel;
 import com.explorer.bailey.sc.model.UserModel;
+import com.explorer.bailey.sc.service.IAwardService;
 import com.explorer.bailey.sc.service.ICoreService;
 import com.explorer.bailey.sc.service.IUserService;
 import com.explorer.bailey.sc.utils.PageUtils;
@@ -38,6 +40,9 @@ public class CoreController {
 
     @Resource
     private ICoreService coreService;
+
+    @Resource
+    private IAwardService awardService;
 
     @GetMapping("/user/login/judge")
     public ApiResult alreadyLogin() {
@@ -147,6 +152,14 @@ public class CoreController {
     @ValidStarter
     public ApiResult sign(@ObjectValid(fieldNames = {"projectId", "startDate"}) @RequestBody SignModel signModel) {
         boolean success = coreService.sign(signModel.getId(), signModel.getProjectId(), signModel.getStartDate(), signModel.getEndDate(), signModel.getRemark(), signModel.getStatus());
+
+        if (success) {
+            Award award = awardService.lotto(SessionUtils.getUser().getId());
+            if (award != null) {
+                return ApiResult.asserts(award);
+            }
+        }
+
         return ApiResult.asserts(success);
     }
 

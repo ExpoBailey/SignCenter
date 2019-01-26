@@ -1,6 +1,8 @@
 package com.explorer.bailey.sc.controller;
 
+import com.explorer.bailey.sc.model.AwardModel;
 import com.explorer.bailey.sc.model.SignModel;
+import com.explorer.bailey.sc.service.IAwardService;
 import com.explorer.bailey.sc.service.ICountService;
 import com.explorer.bailey.sc.utils.SessionUtils;
 import com.minstone.mobile.core.spring.api.ApiResult;
@@ -22,9 +24,17 @@ public class CountController {
     @Resource
     private ICountService countService;
 
+    @Resource
+    private IAwardService awardService;
+
     @GetMapping("/dates")
     public ApiResult findDateList(SignModel signModel) {
         return ApiResult.asserts(countService.findDateList(SessionUtils.getUser().getId(), signModel.getProjectIds()));
+    }
+
+    @GetMapping("/awards")
+    public ApiResult findAward(AwardModel awardModel) {
+        return ApiResult.asserts(awardService.countAwardRecord(SessionUtils.getUser().getId(), awardModel.getId()));
     }
 
 }

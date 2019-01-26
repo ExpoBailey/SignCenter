@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +27,7 @@ import java.util.Set;
 @Table(name = "SC_PROJECT")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties({ "handler","hibernateLazyInitializer", "signInfoSet" })
-public class Project {
+public class Project implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

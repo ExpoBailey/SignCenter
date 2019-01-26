@@ -3,6 +3,7 @@ package com.explorer.bailey.sc.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "SC_SIGN_INFO")
-public class SignInfo {
+public class SignInfo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
