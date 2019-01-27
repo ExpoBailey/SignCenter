@@ -33,6 +33,10 @@ public class Award implements Serializable {
 
     private double probable;
 
+    private String path;
+
+    private String color;
+
     public enum Status {
         BAN(0),
         USE(1);

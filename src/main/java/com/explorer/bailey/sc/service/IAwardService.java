@@ -22,7 +22,7 @@ public interface IAwardService {
 
     boolean updateAwardStatusById(Long id, Award.Status ban);
 
-    Page<Award> findPage(int type, String name, int status, WebConstant.Sort sort, int pageIndex, int pageSize);
+    Page<Award> findPage(Integer type, String name, Integer status, WebConstant.Sort sort, int pageIndex, int pageSize);
 
     boolean addAwardRecord(User user, Award award);
 

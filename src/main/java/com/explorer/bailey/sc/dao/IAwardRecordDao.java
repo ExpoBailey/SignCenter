@@ -15,13 +15,13 @@ import java.util.List;
 public interface IAwardRecordDao extends DefaultRepository<AwardRecord, Long> {
 
     @Query(value = "select new com.explorer.bailey.sc.model.AwardModel(" +
-            "   a.id, a.type, a.name, a.status, a.probable, count(a.id)" +
+            "   a.id, a.type, a.name, a.status, a.probable, count(a.id), a.path, a.color" +
             "   ) from AwardRecord ar, com.explorer.bailey.sc.entity.Award a " +
             "       where a.id = ar.award.id and ar.user.id = :userId" )
     List<AwardModel> countAwardRecord(Long userId);
 
     @Query(value = "select new com.explorer.bailey.sc.model.AwardModel(" +
-            "   a.id, a.type, a.name, a.status, a.probable, count(a.id)" +
+            "   a.id, a.type, a.name, a.status, a.probable, count(a.id), a.path, a.color" +
             "   ) from AwardRecord ar, com.explorer.bailey.sc.entity.Award a " +
             "       where a.id = ar.award.id and ar.award.id = :awardId and ar.user.id = :userId" )
     List<AwardModel> countAwardRecordByAward(Long userId, Long awardId);

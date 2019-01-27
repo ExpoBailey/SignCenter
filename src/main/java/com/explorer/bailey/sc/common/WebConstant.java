@@ -37,6 +37,8 @@ public class WebConstant {
 
         private int value;
 
+        Sort(){}
+
         Sort(int value) {
             this.value = value;
         }

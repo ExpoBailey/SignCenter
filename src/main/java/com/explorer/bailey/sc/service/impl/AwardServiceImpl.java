@@ -77,7 +77,7 @@ public class AwardServiceImpl implements IAwardService {
     }
 
     @Override
-    public Page<Award> findPage(int type, String name, int status, WebConstant.Sort sort, int pageIndex, int pageSize) {
+    public Page<Award> findPage(Integer type, String name, Integer status, WebConstant.Sort sort, int pageIndex, int pageSize) {
 
         Specification<Award> specification = new Specification<Award>() {
             @Override
@@ -89,15 +89,19 @@ public class AwardServiceImpl implements IAwardService {
                     list.add(cb.like(root.get("name").as(String.class), "%" + name + "%"));
                 }
 
-                list.add(cb.equal(root.get("type").as(Integer.class), type));
+                if (type != null) {
+                    list.add(cb.equal(root.get("type").as(Integer.class), type));
+                }
 
-                list.add(cb.equal(root.get("status").as(Integer.class), status));
+                if (status != null) {
+                    list.add(cb.equal(root.get("status").as(Integer.class), status));
+                }
 
                 return cb.and(list.toArray(new Predicate[0]));
             }
         };
 
-        PageRequest pageRequest = new PageRequest(pageIndex - 1, pageSize, new Sort(sort == WebConstant.Sort.ASC ? Sort.Direction.ASC : Sort.Direction.DESC));
+        PageRequest pageRequest = new PageRequest(pageIndex - 1, pageSize, new Sort(sort == WebConstant.Sort.ASC ? Sort.Direction.ASC : Sort.Direction.DESC, "id"));
 
         return awardDao.findAll(specification, pageRequest);
     }

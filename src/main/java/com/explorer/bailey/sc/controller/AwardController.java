@@ -34,6 +34,9 @@ public class AwardController {
         award.setName(awardModel.getName());
         award.setType(awardModel.getType());
         award.setProbable(awardModel.getProbable());
+        award.setPath(awardModel.getPath());
+        award.setColor(awardModel.getColor());
+        award.setStatus(awardModel.getStatus());
         boolean success = awardService.save(award);
         return ApiResult.asserts(success);
     }
@@ -47,7 +50,9 @@ public class AwardController {
                                                     awardModel.getType(),
                                                     awardModel.getName(),
                                                     awardModel.getStatus(),
-                                                    awardModel.getProbable()));
+                                                    awardModel.getProbable(),
+                                                    awardModel.getPath(),
+                                                    awardModel.getColor()));
         return ApiResult.asserts(success);
     }
 
