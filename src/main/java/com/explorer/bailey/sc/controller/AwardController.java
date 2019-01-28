@@ -62,8 +62,10 @@ public class AwardController {
         return ApiResult.asserts(award);
     }
 
-    @GetMapping("/status")
-    public ApiResult delete(AwardModel awardModel) {
+    @PostMapping("/status")
+    @ValidStarter
+    public ApiResult delete(@ObjectValid(fieldNames = {"id","status"})
+                            @RequestBody AwardModel awardModel) {
         boolean success = awardService.updateAwardStatusById(
                                             awardModel.getId(),
                                             awardModel.getStatus() == Award.Status.BAN.getValue() ? Award.Status.BAN : Award.Status.USE);

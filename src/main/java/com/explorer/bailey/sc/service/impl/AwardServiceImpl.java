@@ -51,7 +51,7 @@ public class AwardServiceImpl implements IAwardService {
     private IUserService userService;
 
     @Override
-    @Transactional(rollbackFor = ApiException.class)
+    @Transactional(readOnly = false, rollbackFor = ApiException.class)
     public boolean save(Award award) {
         return awardDao.save(award) != null;
     }
@@ -62,7 +62,7 @@ public class AwardServiceImpl implements IAwardService {
     }
 
     @Override
-    @Transactional(rollbackFor = ApiException.class)
+    @Transactional(readOnly = false, rollbackFor = ApiException.class)
     public boolean updateAwardStatusById(Long id, Award.Status ban) {
 
         Award award = awardDao.findOne(id);
@@ -126,6 +126,7 @@ public class AwardServiceImpl implements IAwardService {
     }
 
     @Override
+    @Transactional(readOnly = false, rollbackFor = ApiException.class)
     public Award lotto(Long userId) {
 
         // 选出奖品列表
@@ -156,7 +157,7 @@ public class AwardServiceImpl implements IAwardService {
         return award;
     }
 
-    @Transactional(rollbackFor = ApiException.class)
+    @Transactional(readOnly = false, rollbackFor = ApiException.class)
     public boolean insert(AwardRecord awardRecord) {
         awardRecord.setId(null);
         return recordDao.save(awardRecord) != null;

@@ -21,7 +21,7 @@ public class UserServiceImpl implements IUserService {
     private IUserDao userDao;
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(readOnly = false, rollbackFor = RuntimeException.class)
     public boolean saveUser(User user) {
         if (user.getId() == null) {
             user.setPassword(MD5CodeUtil.md5(user.getPassword()));
